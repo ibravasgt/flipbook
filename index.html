@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moodboard CasaMaya</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="turn.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        #flipbook {
+            width: 900px;
+            height: 600px;
+        }
+        #flipbook .page {
+            width: 450px;
+            height: 600px;
+            background-size: cover;
+            background-position: center;
+        }
+        @media (max-width: 950px) {
+            #flipbook {
+                width: 100%;
+                height: 500px;
+            }
+            #flipbook .page {
+                width: 50%;
+                height: 500px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="flipbook">
+    <div class="page" style="background-image: url('pagina 1.jpg');"></div>
+    <div class="page" style="background-image: url('pagina 2.jpg');"></div>
+    <div class="page" style="background-image: url('pagina 3.jpg');"></div>
+    <div class="page" style="background-image: url('pagina 4.jpg');"></div>
+    <div class="page" style="background-image: url('pagina 5.jpg');"></div>
+    <div class="page" style="background-image: url('pagina 6.jpg');"></div>
+    <div class="page" style="background-image: url('pagina 7.jpg');"></div>
+    <div class="page" style="background-image: url('pagina 8.jpg');"></div>
+    <div class="page" style="background-image: url('pagina 9.jpg');"></div>
+    <div class="page" style="background-image: url('pagina 10.jpg');"></div>
+    <div class="page" style="background-image: url('pagina 11.jpg');"></div>
+    <div class="page" style="background-image: url('pagina 12.jpg');"></div>
+    <div class="page" style="background-image: url('pagina 13.jpg');"></div>
+    <div class="page" style="background-image: url('pagina 14.jpg');"></div>
+    <div class="page" style="background-image: url('pagina 15.jpg');"></div>
+    <div class="page" style="background-image: url('pagina 16.jpg');"></div>
+    <div class="page" style="background-image: url('pagina 17.jpg');"></div>
+    <div class="page" style="background-image: url('pagina 18.jpg');"></div>
+    <div class="page" style="background-image: url('pagina 19.jpg');"></div>
+</div>
+
+<script>
+    $("#flipbook").turn({
+        width: 900,
+        height: 600,
+        autoCenter: true,
+        display: 'double'
+    });
+</script>
+
+</body>
+</html>
