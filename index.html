@@ -17,24 +17,15 @@
             min-height: 100vh;
         }
         #flipbook {
-            width: 1200px;
-            height: 675px;
+            width: 90vw;
+            height: 50.625vw;
         }
         #flipbook .page {
-            width: 600px;
-            height: 675px;
+            width: 45vw;
+            height: 50.625vw;
             background-size: cover;
             background-position: center;
-        }
-        @media (max-width: 1250px) {
-            #flipbook {
-                width: 100%;
-                height: 56vw;
-            }
-            #flipbook .page {
-                width: 50%;
-                height: 56vw;
-            }
+            background-repeat: no-repeat;
         }
     </style>
 </head>
@@ -64,8 +55,8 @@
 
 <script>
     $("#flipbook").turn({
-        width: 1200,
-        height: 675,
+        width: window.innerWidth * 0.9,
+        height: window.innerWidth * 0.50625,
         autoCenter: true,
         display: 'double'
     });
