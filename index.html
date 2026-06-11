@@ -15,22 +15,35 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            overflow: hidden;
         }
+
         #flipbook {
-            width: 90vw;
-            height: 50.625vw;
+            width: 960px;
+            height: 540px;
         }
+
         #flipbook .page {
-            width: 45vw;
-            height: 50.625vw;
+            width: 960px;
+            height: 540px;
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
         }
+
+        @media (max-width: 1000px) {
+            #flipbook {
+                width: 95vw;
+                height: calc(95vw * 9 / 16);
+            }
+            #flipbook .page {
+                width: 95vw;
+                height: calc(95vw * 9 / 16);
+            }
+        }
     </style>
 </head>
 <body>
-
 <div id="flipbook">
     <div class="page" style="background-image: url('pagina 1.jpg');"></div>
     <div class="page" style="background-image: url('pagina 2.jpg');"></div>
@@ -55,12 +68,19 @@
 
 <script>
     $("#flipbook").turn({
-        width: window.innerWidth * 0.9,
-        height: window.innerWidth * 0.50625,
+        width: 960,
+        height: 540,
         autoCenter: true,
-        display: 'double'
+        display: 'single',   // ← clave: una página a la vez
+        acceleration: true,
+        gradients: true
+    });
+
+    // Navegación con teclas
+    $(document).keydown(function(e) {
+        if (e.keyCode === 37) $("#flipbook").turn("previous");
+        if (e.keyCode === 39) $("#flipbook").turn("next");
     });
 </script>
-
 </body>
 </html>
