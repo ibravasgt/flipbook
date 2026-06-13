@@ -17,10 +17,13 @@
             min-height: 100vh;
             overflow: hidden;
         }
+
         #flipbook {
             width: 960px;
             height: 540px;
+            position: relative;
         }
+
         #flipbook .page {
             width: 960px;
             height: 540px;
@@ -28,6 +31,67 @@
             background-position: center;
             background-repeat: no-repeat;
         }
+
+        /* Flechas de navegación */
+        .nav-btn {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.15);
+            border: 2px solid rgba(255,255,255,0.4);
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            font-size: 22px;
+            cursor: pointer;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            backdrop-filter: blur(4px);
+        }
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.35);
+        }
+        #btn-prev { left: 16px; }
+        #btn-next { right: 16px; }
+
+        /* Hint animado en esquina */
+        #corner-hint {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0,0,0,0.55);
+            color: white;
+            font-size: 13px;
+            padding: 8px 14px;
+            border-radius: 24px;
+            backdrop-filter: blur(6px);
+            animation: fadeInOut 4s ease forwards;
+            z-index: 999;
+            pointer-events: none;
+        }
+        #corner-hint .arrow-icon {
+            font-size: 20px;
+            animation: bounceLeft 0.8s infinite alternate;
+            display: inline-block;
+        }
+        @keyframes bounceLeft {
+            from { transform: translateX(0px); }
+            to   { transform: translateX(-6px); }
+        }
+        @keyframes fadeInOut {
+            0%   { opacity: 0; }
+            15%  { opacity: 1; }
+            75%  { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
         @media (max-width: 1000px) {
             #flipbook {
                 width: 100vw;
@@ -37,10 +101,23 @@
                 width: 100vw;
                 height: calc(100vw * 9 / 16);
             }
+            .nav-btn {
+                width: 38px;
+                height: 38px;
+                font-size: 18px;
+            }
         }
     </style>
 </head>
 <body>
+
+<button class="nav-btn" id="btn-prev">‹</button>
+<button class="nav-btn" id="btn-next">›</button>
+
+<div id="corner-hint">
+    <span class="arrow-icon">👆</span> Toca la esquina para pasar la página
+</div>
+
 <div id="flipbook">
     <div class="page" style="background-image: url('pagina 1.jpg');"></div>
     <div class="page" style="background-image: url('pagina 2.jpg');"></div>
@@ -62,6 +139,7 @@
     <div class="page" style="background-image: url('pagina 18.jpg');"></div>
     <div class="page" style="background-image: url('pagina 19.jpg');"></div>
 </div>
+
 <script>
     function getSize() {
         var w = Math.min($(window).width(), 960);
@@ -77,18 +155,41 @@
         autoCenter: true,
         display: 'single',
         acceleration: true,
-        gradients: true
+        gradients: true,
+        when: {
+            // Oculta el hint cuando el usuario ya pasó la primera página
+            turned: function(e, page) {
+                if (page > 1) {
+                    $("#corner-hint").fadeOut(400);
+                }
+            }
+        }
     });
 
+    // Botones
+    $("#btn-prev").on("click", function() {
+        $("#flipbook").turn("previous");
+    });
+    $("#btn-next").on("click", function() {
+        $("#flipbook").turn("next");
+    });
+
+    // Resize responsive
     $(window).on('resize', function() {
         var s = getSize();
         $("#flipbook").turn("size", s.w, s.h);
     });
 
+    // Teclado
     $(document).keydown(function(e) {
         if (e.keyCode === 37) $("#flipbook").turn("previous");
         if (e.keyCode === 39) $("#flipbook").turn("next");
     });
+
+    // El hint desaparece solo después de 4 segundos
+    setTimeout(function() {
+        $("#corner-hint").fadeOut(600);
+    }, 4000);
 </script>
 </body>
 </html>
