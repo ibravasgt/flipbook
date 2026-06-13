@@ -32,18 +32,6 @@
             background-repeat: no-repeat;
         }
 
-        /* Zonas clickeables invisibles */
-        #zone-prev, #zone-next {
-            position: fixed;
-            top: 0;
-            height: 100%;
-            width: 30%;
-            z-index: 100;
-            cursor: pointer;
-        }
-        #zone-prev { left: 0; }
-        #zone-next { right: 0; }
-
         /* Flechas navegación */
         .nav-btn {
             position: fixed;
@@ -138,11 +126,6 @@
 </head>
 <body>
 
-<!-- Zonas invisibles de navegación -->
-<div id="zone-prev"></div>
-<div id="zone-next"></div>
-
-<!-- Botones visibles -->
 <button class="nav-btn" id="btn-prev">‹</button>
 <button class="nav-btn" id="btn-next">›</button>
 <button id="btn-fullscreen" title="Fullscreen">⛶</button>
@@ -201,14 +184,41 @@
     $("#btn-prev").on("click", function() { $("#flipbook").turn("previous"); });
     $("#btn-next").on("click", function() { $("#flipbook").turn("next"); });
 
-    // Zonas invisibles
-    $("#zone-prev").on("click", function() { $("#flipbook").turn("previous"); });
-    $("#zone-next").on("click", function() { $("#flipbook").turn("next"); });
-
     // Teclado
     $(document).keydown(function(e) {
         if (e.keyCode === 37) $("#flipbook").turn("previous");
         if (e.keyCode === 39) $("#flipbook").turn("next");
+    });
+
+    // Click en la página — solo si NO hubo drag
+    var mouseStartX = 0;
+    var mouseMoved = false;
+
+    $("#flipbook").on("mousedown touchstart", function(e) {
+        mouseStartX = e.type === "touchstart" ? e.originalEvent.touches[0].clientX : e.clientX;
+        mouseMoved = false;
+    });
+
+    $("#flipbook").on("mousemove touchmove", function(e) {
+        var currentX = e.type === "touchmove" ? e.originalEvent.touches[0].clientX : e.clientX;
+        if (Math.abs(currentX - mouseStartX) > 10) {
+            mouseMoved = true;
+        }
+    });
+
+    $("#flipbook").on("mouseup touchend", function(e) {
+        if (!mouseMoved) {
+            // Solo click sin drag — navegar según lado
+            var clickX = e.type === "touchend"
+                ? e.originalEvent.changedTouches[0].clientX
+                : e.clientX;
+            var mid = $(window).width() / 2;
+            if (clickX > mid) {
+                $("#flipbook").turn("next");
+            } else {
+                $("#flipbook").turn("previous");
+            }
+        }
     });
 
     // Resize responsive
