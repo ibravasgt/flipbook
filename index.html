@@ -17,13 +17,11 @@
             min-height: 100vh;
             overflow: hidden;
         }
-
         #flipbook {
             width: 960px;
             height: 540px;
             position: relative;
         }
-
         #flipbook .page {
             width: 960px;
             height: 540px;
@@ -31,8 +29,6 @@
             background-position: center;
             background-repeat: no-repeat;
         }
-
-        /* Flechas navegación */
         .nav-btn {
             position: fixed;
             top: 50%;
@@ -55,8 +51,6 @@
         .nav-btn:hover { background: rgba(255,255,255,0.35); }
         #btn-prev { left: 16px; }
         #btn-next { right: 16px; }
-
-        /* Botón fullscreen */
         #btn-fullscreen {
             position: fixed;
             top: 16px;
@@ -78,8 +72,6 @@
             transition: background 0.2s;
         }
         #btn-fullscreen:hover { background: rgba(255,255,255,0.35); }
-
-        /* Hint */
         #corner-hint {
             position: fixed;
             bottom: 24px;
@@ -114,7 +106,6 @@
             75%  { opacity: 1; }
             100% { opacity: 0; }
         }
-
         @media (max-width: 1000px) {
             #flipbook { width: 100vw; height: calc(100vw * 9 / 16); }
             #flipbook .page { width: 100vw; height: calc(100vw * 9 / 16); }
@@ -125,6 +116,8 @@
     </style>
 </head>
 <body>
+
+<audio id="sonido-hoja" src="pasar.wav" preload="auto"></audio>
 
 <button class="nav-btn" id="btn-prev">‹</button>
 <button class="nav-btn" id="btn-next">›</button>
@@ -157,7 +150,6 @@
 </div>
 
 <script>
-    // --- Flipbook init ---
     function getSize() {
         var w = Math.min($(window).width(), 960);
         var h = w * 9 / 16;
@@ -176,21 +168,21 @@
         when: {
             turned: function(e, page) {
                 if (page > 1) $("#corner-hint").fadeOut(400);
+                var sonido = document.getElementById("sonido-hoja");
+                sonido.currentTime = 0;
+                sonido.play();
             }
         }
     });
 
-    // Botones visibles
     $("#btn-prev").on("click", function() { $("#flipbook").turn("previous"); });
     $("#btn-next").on("click", function() { $("#flipbook").turn("next"); });
 
-    // Teclado
     $(document).keydown(function(e) {
         if (e.keyCode === 37) $("#flipbook").turn("previous");
         if (e.keyCode === 39) $("#flipbook").turn("next");
     });
 
-    // Click en la página — solo si NO hubo drag
     var mouseStartX = 0;
     var mouseMoved = false;
 
@@ -201,14 +193,11 @@
 
     $("#flipbook").on("mousemove touchmove", function(e) {
         var currentX = e.type === "touchmove" ? e.originalEvent.touches[0].clientX : e.clientX;
-        if (Math.abs(currentX - mouseStartX) > 10) {
-            mouseMoved = true;
-        }
+        if (Math.abs(currentX - mouseStartX) > 10) mouseMoved = true;
     });
 
     $("#flipbook").on("mouseup touchend", function(e) {
         if (!mouseMoved) {
-            // Solo click sin drag — navegar según lado
             var clickX = e.type === "touchend"
                 ? e.originalEvent.changedTouches[0].clientX
                 : e.clientX;
@@ -221,16 +210,13 @@
         }
     });
 
-    // Resize responsive
     $(window).on('resize', function() {
         var s = getSize();
         $("#flipbook").turn("size", s.w, s.h);
     });
 
-    // Hint desaparece solo
     setTimeout(function() { $("#corner-hint").fadeOut(600); }, 4000);
 
-    // --- Fullscreen ---
     $("#btn-fullscreen").on("click", function() {
         var el = document.documentElement;
         if (!document.fullscreenElement) {
