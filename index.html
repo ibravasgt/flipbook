@@ -73,12 +73,13 @@
         }
         #btn-fullscreen:hover { background: rgba(255,255,255,0.35); }
 
-        /* Botón play */
+        /* Botón play abajo al centro */
         #btn-play {
             position: fixed;
-            top: 16px;
-            left: 16px;
-            background: rgba(255,255,255,0.15);
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.55);
             border: 2px solid rgba(255,255,255,0.4);
             color: white;
             width: 42px;
@@ -173,14 +174,12 @@
 </div>
 
 <script>
-    // Lista de audios — solo audio1.mp3 por ahora, el resto null
     var audios = [
         'audio1.mp3',
         null, null, null, null, null, null, null, null,
         null, null, null, null, null, null, null, null
     ];
 
-    var currentPage = 1;
     var narrador = document.getElementById('narrador');
     var isPlaying = false;
 
@@ -216,7 +215,6 @@
         gradients: true,
         when: {
             turned: function(e, page) {
-                currentPage = page;
                 if (page > 1) $("#corner-hint").fadeOut(400);
                 var sonido = document.getElementById("sonido-hoja");
                 sonido.currentTime = 0;
@@ -226,10 +224,8 @@
         }
     });
 
-    // Cargar audio de página 1 al inicio
     loadAudio(1);
 
-    // Botón play/pause
     $("#btn-play").on("click", function() {
         if (!narrador.src || narrador.src === window.location.href) return;
         if (isPlaying) {
