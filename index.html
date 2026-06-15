@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moodboard CasaMaya</title>
+    <title>Revista</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="turn.js"></script>
     <style>
@@ -18,13 +18,13 @@
             overflow: hidden;
         }
         #flipbook {
-            width: 960px;
-            height: 540px;
+            width: 480px;
+            height: 720px;
             position: relative;
         }
         #flipbook .page {
-            width: 960px;
-            height: 540px;
+            width: 480px;
+            height: 720px;
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -72,6 +72,29 @@
             transition: background 0.2s;
         }
         #btn-fullscreen:hover { background: rgba(255,255,255,0.35); }
+
+        /* Botón play */
+        #btn-play {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            background: rgba(255,255,255,0.15);
+            border: 2px solid rgba(255,255,255,0.4);
+            color: white;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+            transition: background 0.2s;
+        }
+        #btn-play:hover { background: rgba(255,255,255,0.35); }
+
         #corner-hint {
             position: fixed;
             bottom: 24px;
@@ -106,9 +129,9 @@
             75%  { opacity: 1; }
             100% { opacity: 0; }
         }
-        @media (max-width: 1000px) {
-            #flipbook { width: 100vw; height: calc(100vw * 9 / 16); }
-            #flipbook .page { width: 100vw; height: calc(100vw * 9 / 16); }
+        @media (max-width: 520px) {
+            #flipbook { width: 100vw; height: calc(100vw * 3 / 2); }
+            #flipbook .page { width: 100vw; height: calc(100vw * 3 / 2); }
             .nav-btn { width: 36px; height: 36px; font-size: 18px; }
             #btn-prev { left: 6px; }
             #btn-next { right: 6px; }
@@ -118,41 +141,67 @@
 <body>
 
 <audio id="sonido-hoja" src="pasar.wav" preload="auto"></audio>
+<audio id="narrador" preload="auto"></audio>
 
 <button class="nav-btn" id="btn-prev">‹</button>
 <button class="nav-btn" id="btn-next">›</button>
 <button id="btn-fullscreen" title="Fullscreen">⛶</button>
+<button id="btn-play" title="Play narration">▶</button>
 
 <div id="corner-hint">
     <span class="arrow-icon">👆</span> Tap the corner to turn the page
 </div>
 
 <div id="flipbook">
-    <div class="page" style="background-image: url('pagina 1.jpg');"></div>
-    <div class="page" style="background-image: url('pagina 2.jpg');"></div>
-    <div class="page" style="background-image: url('pagina 3.jpg');"></div>
-    <div class="page" style="background-image: url('pagina 4.jpg');"></div>
-    <div class="page" style="background-image: url('pagina 5.jpg');"></div>
-    <div class="page" style="background-image: url('pagina 6.jpg');"></div>
-    <div class="page" style="background-image: url('pagina 7.jpg');"></div>
-    <div class="page" style="background-image: url('pagina 8.jpg');"></div>
-    <div class="page" style="background-image: url('pagina 9.jpg');"></div>
-    <div class="page" style="background-image: url('pagina 10.jpg');"></div>
-    <div class="page" style="background-image: url('pagina 11.jpg');"></div>
-    <div class="page" style="background-image: url('pagina 12.jpg');"></div>
-    <div class="page" style="background-image: url('pagina 13.jpg');"></div>
-    <div class="page" style="background-image: url('pagina 14.jpg');"></div>
-    <div class="page" style="background-image: url('pagina 15.jpg');"></div>
-    <div class="page" style="background-image: url('pagina 16.jpg');"></div>
-    <div class="page" style="background-image: url('pagina 17.jpg');"></div>
-    <div class="page" style="background-image: url('pagina 18.jpg');"></div>
-    <div class="page" style="background-image: url('pagina 19.jpg');"></div>
+    <div class="page" style="background-image: url('imagen 1.jpg');"></div>
+    <div class="page" style="background-image: url('imagen 2.jpg');"></div>
+    <div class="page" style="background-image: url('imagen 3.jpg');"></div>
+    <div class="page" style="background-image: url('imagen 4.jpg');"></div>
+    <div class="page" style="background-image: url('imagen 5.jpg');"></div>
+    <div class="page" style="background-image: url('imagen 6.jpg');"></div>
+    <div class="page" style="background-image: url('imagen 7.jpg');"></div>
+    <div class="page" style="background-image: url('imagen 8.jpg');"></div>
+    <div class="page" style="background-image: url('imagen 9.jpg');"></div>
+    <div class="page" style="background-image: url('imagen 10.jpg');"></div>
+    <div class="page" style="background-image: url('imagen 11.jpg');"></div>
+    <div class="page" style="background-image: url('imagen 12.jpg');"></div>
+    <div class="page" style="background-image: url('imagen 13.jpg');"></div>
+    <div class="page" style="background-image: url('imagen 14.jpg');"></div>
+    <div class="page" style="background-image: url('imagen 15.jpg');"></div>
+    <div class="page" style="background-image: url('imagen 16.jpg');"></div>
+    <div class="page" style="background-image: url('imagen 17.jpg');"></div>
 </div>
 
 <script>
+    // Lista de audios — solo audio1.mp3 por ahora, el resto null
+    var audios = [
+        'audio1.mp3',
+        null, null, null, null, null, null, null, null,
+        null, null, null, null, null, null, null, null
+    ];
+
+    var currentPage = 1;
+    var narrador = document.getElementById('narrador');
+    var isPlaying = false;
+
+    function loadAudio(page) {
+        narrador.pause();
+        narrador.currentTime = 0;
+        isPlaying = false;
+        $("#btn-play").text("▶");
+        if (audios[page - 1]) {
+            narrador.src = audios[page - 1];
+            $("#btn-play").css("opacity", "1");
+        } else {
+            narrador.src = "";
+            $("#btn-play").css("opacity", "0.3");
+        }
+    }
+
     function getSize() {
-        var w = Math.min($(window).width(), 960);
-        var h = w * 9 / 16;
+        var maxW = 480;
+        var w = Math.min($(window).width(), maxW);
+        var h = w * 3 / 2;
         return { w: w, h: h };
     }
 
@@ -167,12 +216,36 @@
         gradients: true,
         when: {
             turned: function(e, page) {
+                currentPage = page;
                 if (page > 1) $("#corner-hint").fadeOut(400);
                 var sonido = document.getElementById("sonido-hoja");
                 sonido.currentTime = 0;
                 sonido.play();
+                loadAudio(page);
             }
         }
+    });
+
+    // Cargar audio de página 1 al inicio
+    loadAudio(1);
+
+    // Botón play/pause
+    $("#btn-play").on("click", function() {
+        if (!narrador.src || narrador.src === window.location.href) return;
+        if (isPlaying) {
+            narrador.pause();
+            isPlaying = false;
+            $("#btn-play").text("▶");
+        } else {
+            narrador.play();
+            isPlaying = true;
+            $("#btn-play").text("⏸");
+        }
+    });
+
+    narrador.addEventListener('ended', function() {
+        isPlaying = false;
+        $("#btn-play").text("▶");
     });
 
     $("#btn-prev").on("click", function() { $("#flipbook").turn("previous"); });
