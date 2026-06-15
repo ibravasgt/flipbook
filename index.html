@@ -73,43 +73,40 @@
         }
         #btn-fullscreen:hover { background: rgba(255,255,255,0.35); }
 
-        /* Barra de play abajo */
         #play-bar {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(0,0,0,0.7);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255,0,0,0.9);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 16px;
-            padding: 10px 0;
-            z-index: 9999;
+            padding: 20px;
+            border-radius: 20px;
+            z-index: 99999;
         }
         #btn-play {
-            background: #fff;
+            background: white;
             border: none;
             color: #222;
-            width: 48px;
-            height: 48px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            font-size: 20px;
+            font-size: 24px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             font-weight: bold;
         }
         #play-label {
             color: white;
-            font-size: 13px;
+            font-size: 16px;
             font-family: sans-serif;
+            margin-right: 12px;
         }
 
         #corner-hint {
             position: fixed;
-            bottom: 80px;
+            bottom: 24px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
@@ -163,6 +160,11 @@
     <span class="arrow-icon">👆</span> Tap the corner to turn the page
 </div>
 
+<div id="play-bar">
+    <span id="play-label">Play narration</span>
+    <button id="btn-play">▶</button>
+</div>
+
 <div id="flipbook">
     <div class="page" style="background-image: url('imagen 1.jpg');"></div>
     <div class="page" style="background-image: url('imagen 2.jpg');"></div>
@@ -181,12 +183,6 @@
     <div class="page" style="background-image: url('imagen 15.jpg');"></div>
     <div class="page" style="background-image: url('imagen 16.jpg');"></div>
     <div class="page" style="background-image: url('imagen 17.jpg');"></div>
-</div>
-
-<!-- Barra de play abajo -->
-<div id="play-bar">
-    <span id="play-label">Page narration</span>
-    <button id="btn-play">▶</button>
 </div>
 
 <script>
